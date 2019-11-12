@@ -1,0 +1,28 @@
+- name: Install Open-shift 
+  pip:
+    name: openshift
+    
+- name: Provision nginx service object 
+  k8s:
+    state: present
+    src: ~/balena-deployment/mandatory.yml
+
+- name: Provision a deployment Object
+  k8s:
+    state: present
+    src: ~/balena-deployment/deployment.yml
+  
+- name: Provision service object 
+  k8s:
+    state: present
+    src: ~/balena-deployment/service.yml
+
+- name: create ingress service 
+  k8s:
+    state: present
+    src: ~/balena-deployment/ingress.yml
+
+- name: Provision autoscaler object 
+  k8s:
+    state: present
+    src: ~/balena-deployment/autoscaler.yml

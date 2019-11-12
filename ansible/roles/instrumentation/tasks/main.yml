@@ -1,0 +1,49 @@
+# - name: Install Open-shift 
+#   pip:
+#     name: openshift
+
+# Provision Prometheus Service within cluster
+    
+- name: Provision Prometheus RBAC
+  k8s:
+    state: present
+    src: ~/balena-deployment/k8s-resources/instrumentation/rbac/cluster-role.yml
+
+- name: Provision Prometheus deployment
+  k8s:
+    state: present
+    src: ~/balena-deployment/k8s-resources/instrumentation/prometheus/prometheus.yml
+
+- name: Provision Prometheus configMap
+  k8s:
+    state: present
+    src: ~/balena-deployment/k8s-resources/instrumentation/prometheus/prometheus-configmap.yml
+
+- name: Provision Prometheus Service
+  k8s:
+    state: present
+    src: ~/balena-deployment/k8s-resources/instrumentation/prometheus/prometheus-svc.yml
+
+
+
+#  Provision Grafana Service
+
+- name: Provision Grafana deployment
+  k8s:
+    state: present
+    src: ~/balena-deployment/k8s-resources/instrumentation/grafana/grafana.yml
+
+
+- name: Provision Grafana VolumeClaim
+  k8s:
+    state: present
+    src: ~/balena-deployment/k8s-resources/instrumentation/grafana/grafana-vm-claim.yml
+
+
+- name: Provision Grafana service
+  k8s:
+    state: present
+    src: ~/balena-deployment/k8s-resources/instrumentation/grafana/grafana-svc.yml
+
+
+
