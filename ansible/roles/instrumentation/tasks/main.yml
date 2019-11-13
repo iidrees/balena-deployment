@@ -1,8 +1,4 @@
-# - name: Install Open-shift 
-#   pip:
-#     name: openshift
-
-# Provision Prometheus Service within cluster
+# Provision Prometheus & Grafana Services within cluster
     
 - name: Provision Prometheus RBAC
   k8s:

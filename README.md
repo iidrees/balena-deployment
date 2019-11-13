@@ -1,4 +1,4 @@
-# Service Architecture Documentation
+# Service Architecture Design Documentation
 
 
 ### Introduction
@@ -150,3 +150,7 @@ Some of the performance metrics I would collect are (but not limited to):
 - `Resource Utilization` i.e. CPU usage, memory usage, node mem usage, CPU capacity, File system usage, requests, resource limits, etc.
 - `Node/Pods/Containers health`
 
+### Conclusion
+Of course this is a basic architecture design based on the use case provided, however, it should be noted that the way things are designed, I have ensured that services are as stateless as possible in such a way that no whatever happening in one service should detrimentally affect the health and availability of the other services. 
+You are probably thinking `But the UI depends on the API service`, you are neither wrong nor right but technically speaking the purpose of a microservice is to be able to serve a full (non monolithic) functional application that can be interfaced/used with by users/customers without any glitches or the existence of another service, now if this UI service returns/renders data (retrieved from the API service) is another use case entirely. But does the UI serve and render the frontend without any other service? `Yes`, then its purpose to us is done and has been achieved.
+Now another advantage of this architecture is how we would still be able to manage our `Infrastructure As Code` easily since things are as modularised as the design itself while also making it easier to onboard new member(s) onto the codebase when the need arises.

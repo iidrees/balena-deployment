@@ -1,7 +1,5 @@
-- name: Install Open-shift 
-  pip:
-    name: openshift
-    
+# Provision the API & UI services into the cluster
+
 - name: Provision nginx service object 
   k8s:
     state: present
