@@ -1,4 +1,4 @@
-# Service Documentation
+# Service Architecture Documentation
 
 
 ### Introduction
@@ -17,6 +17,7 @@ Following the concept of `Infrastructure As Code` this contains the design and d
 - **[Prometheus](https://prometheus.io)**
 - **[Grafana](https://grafana.com)**
 
+<br>
 
 ### Infrastructure Design
 
@@ -56,13 +57,22 @@ Creating a database is relatively easy, but getting access to the database from 
 5. There is a `Prometheus` service for gathering cluster-wide `metrics`, however, I added a `Grafana` service because why gather metrics if you cannot view/visualise/render these metrics. Of course the `METRICS_URL` is going to be passed into the API instance, however, if the API is not a metrics visualiser then `Grafana` is definitely needed to do this.
 Before the `Prometheus` service is created, a `Role-Binding Access Control` must be created in order to give the service a cluster-wide access to gather metrics. You will find the scripts in the `/k8s-resources/instrumentation` directory.
 
-1. GCP Cloud Bucket Storage would be an excellent store for our Terraform state file by acting as our backend. The bucket can also be used as a database backup store, what that means is that we get a chance to have a `.sql` copy of the data in our database which we can migrate if the there is the need for it.
+6. GCP Cloud Bucket Storage would be an excellent store for our Terraform state file by acting as our backend. The bucket can also be used as a database backup store, what that means is that we get a chance to have a `.sql` copy of the data in our database which we can migrate if the there is the need for it.
 Although this may get complicated fast depending on how large the data get overtime, however at this point planning for current use case is the best thing to do now.
 Although you would find a `CronJob` Job in the attached design above, it no `k8s yml` script has been added to do this yet.
 
+
+#### Potential Shortcomings
+
+- There is a missing application package not included in the shipped Pull Request which has the tendency to introduce a downtime. If this is not caught during the CI/CD stage, then what that would be left would be to ensure that the that new now update does not cause a downtime while I communicate with the team as a whole to let them know what is going on. If I no one else is already on the ticket, I would raise a ticket and quickly raise a bug fix that would add the missing package to the application so we can finally ship our new features to our users.
+- Kubernetes is a very sweet and intresting technology, however it can get complex really fast especially where you are working within a team and different team members are contributing to the same codebase(s). The solution would be to ensure that there is a coding convention that would be followed while ensuring that code are adequately commented.
+- Monitoring a k8s cluster is not childs play, however, with detailed time spent (incrementally) to add monitoring and metric gathering tools like Prometheus, we can keep adding more metrics and monitoring parameters. Doing things in bits would definitely help here.
+- Even though the diagram is very elaborate in describing what the infrastructure would look like, not all team members would probably know what and how kubernetes work and what to not to do. So I would approach this by leaving enough documentation so there is a central source of easy to use docs members of the team can use to find their way around things easily. If that does not work completely then a face to face approach would be taken where members would be introduced to the concept of k8s and then point them to easy use resources they can use to quickly get started with learning about it.
+
+
 <hr>
 
-### **A high level of the description of the task.**
+### A high level of the description of the task.
 
 - Deploy the following services
   - Frontend UI
@@ -138,12 +148,5 @@ Some of the performance metrics I would collect are (but not limited to):
 - `Deployment metrics` i.e. how often are deployments happening, what are the issues encountered after each deployment? How fast are the new pods available? etc.
 - `Running pods` i.e How many pods restarts? How often do the pods restart? Do the pods get evicted? etc.
 - `Resource Utilization` i.e. CPU usage, memory usage, node mem usage, CPU capacity, File system usage, requests, resource limits, etc.
-- `Containers health`
+- `Node/Pods/Containers health`
 
-
-### Potential Shortcomings
-
-- There is a missing application package not included in the shipped Pull Request which has the tendency to introduce a downtime. If this is not caught during the CI/CD stage, then what that would be left would be to ensure that the that new now update does not cause a downtime while I communicate with the team as a whole to let them know what is going on. If I no one else is already on the ticket, I would raise a ticket and quickly raise a bug fix that would add the missing package to the application so we can finally ship our new features to our users.
-- Kubernetes is a very sweet and intresting technology, however it can get complex really fast especially where you are working within a team and different team members are contributing to the same codebase(s). The solution would be to ensure that there is a coding convention that would be followed while ensuring that code are adequately commented.
-- Monitoring a k8s cluster is not childs play, however, with detailed time spent (incrementally) to add monitoring and metric gathering tools like Prometheus, we can keep adding more metrics and monitoring parameters. Doing things in bits would definitely help here.
-- Even though the diagram is very elaborate in describing what the infrastructure would look like, not all team members would probably know what and how kubernetes work and what to not to do. So I would approach this by leaving enough documentation so there is a central source of easy to use docs members of the team can use to find their way around things easily. If that does not work completely then a face to face approach would be taken where members would be introduced to the concept of k8s and then point them to easy use resources they can use to quickly get started with learning about it.
